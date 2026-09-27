@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "new-daily-spotify-podcast-list"
+version = "0.1.0"
+description = "NewDailySpotifyPodcastList：透過 GitHub Actions 將當天更新的 Spotify / YouTube 內容同步到播放清單"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "NewDailySpotifyPodcastList" }]
+dependencies = [
+  "httpx>=0.27,<0.29",
+  "pydantic>=2.7,<3",
+  "pydantic-settings>=2.3,<3",
+  "tzdata>=2024.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=9.0.3,<10",
+  "pytest-cov>=5.0,<6",
+  "ruff>=0.6,<0.8",
+  "bandit>=1.7.9,<2",
+  "mypy>=1.11,<2",
+  "pip-audit>=2.7,<3",
+]
+
+[project.scripts]
+spotify-daily-podcasts = "spotify_daily_podcasts.cli:main"
+spotify-daily-podcasts-auth = "spotify_daily_podcasts.auth:main"
+spotify-daily-podcasts-youtube-auth = "spotify_daily_podcasts.youtube_auth:main"
+new-daily-spotify-podcast-list = "spotify_daily_podcasts.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers --cov=spotify_daily_podcasts --cov-report=term-missing --cov-fail-under=80"
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "N"]
+ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S105", "S106"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["spotify_daily_podcasts"]
+mypy_path = "src"
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
+skips = ["B101"]
+
+[tool.coverage.run]
+source = ["src/spotify_daily_podcasts"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "if __name__ == .__main__.:",
+]

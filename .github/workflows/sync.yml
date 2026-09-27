@@ -1,0 +1,68 @@
+name: Sync daily podcasts
+
+on:
+  schedule:
+    # 每天 22:00 UTC ≈ 台灣時間次日 06:00，以 Asia/Taipei 計算「當天」
+    - cron: "0 22 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "只計算不寫入播放清單"
+        type: boolean
+        default: false
+      platform:
+        description: "要同步的平台"
+        type: choice
+        options:
+          - all
+          - spotify
+          - youtube
+        default: all
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-daily-podcasts
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+      SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+      SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+      YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+      YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+      YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Sync dependencies
+        run: uv sync --extra dev
+
+      - name: Validate project.toml
+        run: uv run python -m spotify_daily_podcasts --validate-config --config project.toml
+
+      - name: Sync playlists
+        run: |
+          extra=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            extra="--dry-run"
+          fi
+          platform="${{ github.event.inputs.platform }}"
+          if [ -z "$platform" ]; then
+            platform="all"
+          fi
+          uv run python -m spotify_daily_podcasts --config project.toml --platform "$platform" $extra

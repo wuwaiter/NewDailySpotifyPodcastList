@@ -1,0 +1,21 @@
+# 播放清單與頻道對應。
+# 只在實際執行同步（GitHub Actions 排程 / 本機 CLI）時讀取，套件 import 時不會載入。
+# 禁止在此檔放入 token、client_secret 或 API key。
+
+timezone = "Asia/Taipei"
+market = "TW"
+
+[[spotify.playlists]]
+name = "CI 驗證用 Spotify 清單 A"
+playlist_id = "aaaaaaaaaaaaaaaaaaaaa1"
+channel_ids = ["bbbbbbbbbbbbbbbbbbbbb1"]
+
+[[spotify.playlists]]
+name = "CI 驗證用 Spotify 清單 B"
+playlist_id = "aaaaaaaaaaaaaaaaaaaaa2"
+channel_ids = ["bbbbbbbbbbbbbbbbbbbbb2", "bbbbbbbbbbbbbbbbbbbbb3"]
+
+[[youtube.playlists]]
+name = "CI 驗證用 YouTube 清單 A"
+playlist_id = "PLyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+channel_ids = ["UCzzzzzzzzzzzzzzzzzzzzzz"]

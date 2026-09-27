@@ -1,0 +1,10 @@
+title = "gitleaks config"
+
+[allowlist]
+description = "說明文件與範例設定中的假 ID / 空環境變數名稱"
+paths = [
+  '''README\.md''',
+  '''SECURITY\.md''',
+  '''\.env\.example''',
+  '''project\.toml''',
+]

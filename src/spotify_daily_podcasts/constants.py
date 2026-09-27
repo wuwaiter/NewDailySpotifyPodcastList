@@ -1,0 +1,20 @@
+"""共用常數。Loop 次數上限固定為 5（重試、分頁、批次寫入）。"""
+
+MAX_LOOP = 5
+SPOTIFY_API_BASE = "https://api.spotify.com/v1"
+SPOTIFY_ACCOUNTS_BASE = "https://accounts.spotify.com"
+SPOTIFY_ID_LENGTH = 22
+YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3"
+GOOGLE_OAUTH_URL = "https://oauth2.googleapis.com/token"
+GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
+DEFAULT_CONFIG_PATH = "project.toml"
+DEFAULT_MARKET = "TW"
+DEFAULT_TIMEZONE = "Asia/Taipei"
+DEFAULT_REDIRECT_URI = "http://127.0.0.1:43821/callback"
+DEFAULT_YOUTUBE_REDIRECT_URI = "http://127.0.0.1:43822/callback"
+PAGE_LIMIT = 50
+PLAYLIST_REPLACE_CHUNK = 100
+HTTP_TIMEOUT_SECONDS = 20.0
+YOUTUBE_CHANNEL_ID_LENGTH = 24
+YOUTUBE_PLAYLIST_ID_MIN = 12
+YOUTUBE_PLAYLIST_ID_MAX = 64
